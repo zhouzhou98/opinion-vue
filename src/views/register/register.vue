@@ -1,12 +1,11 @@
 <template>
     <div class="login-container">
-      <el-form ref="form" :rules="rules" :model="form" label-width="80px" class="login-form">
+      <el-form ref="form"  :model="form" label-width="80px" class="login-form">
         <h4 class="login-title">舆论情报管理系统</h4>
         <br>
         <el-form-item label="用户名" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
-        
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email"></el-input>
         </el-form-item>
