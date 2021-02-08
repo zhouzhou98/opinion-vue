@@ -34,7 +34,7 @@
       </el-menu>
 
       <div class="v_header_info">
-        <span style="margin-right: 10px;font-size:20%">苏毓洲</span>
+        <span style="margin-right: 10px;font-size:20%">{{username}}</span>
         <el-button size="small" type="danger" @click="logOff">logout</el-button>
       </div>
     </el-header>

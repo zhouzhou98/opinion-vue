@@ -47,7 +47,7 @@
     },
     methods: {
       submitForm(formName) {
-          // this.isloading = true;
+          this.isloading = true;
           this.$refs[formName].validate(valid => {
             // console.log(valid) 验证通过为true，有一个不通过就是false
             if (valid) {
@@ -67,7 +67,7 @@
                   var token=data.token
                   var user=data.user
                   jscookie.set('tokenAuth',token)
-                  jscookie.set('username',user.realName)
+                  jscookie.set('username',user.username)
                   jscookie.set('user',user)
 
                   this.$store.commit('set_token', token);

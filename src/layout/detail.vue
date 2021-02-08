@@ -34,7 +34,7 @@
       </el-menu>
 
       <div class="v_header_info">
-        <span style="margin-right: 10px;font-size:20%">苏毓洲</span>
+        <span style="margin-right: 10px;font-size:20%">{{username}}</span>
         <el-button size="small" type="success" @click="back()">back</el-button>
         <el-button size="small" type="danger" @click="logOff">logout</el-button>
       </div>
@@ -108,15 +108,14 @@ export default {
       }
       this.isInit = true;
       loading.close();
-      if(!jsCookie.get('user')){
+      
         if (this.$route.path === '/') {
         const firstRoutePath = this.showRoutes[0] ? this.showRoutes[0].path : '/';
         if (!firstRoutePath !== '/') {
           this.$router.replace(firstRoutePath);
         }
-      }
-      }else{
-          this.$router.push("/login")
+      
+      
       }
       
     },
