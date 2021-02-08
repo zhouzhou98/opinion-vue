@@ -166,17 +166,17 @@ router.beforeEach((to, from, next) => {
   // console.log(to.path)
 
   if (to.matched.some(r =>{
-    console.log(r.meta)
+   
     r.meta.requireAuth
   } )) {   //这里的requireAuth为路由中定义的 meta:{requireAuth:true}，意思为：该路由添加该字段，表示进入该路由需要登陆的
     // console.log(store.state.token)
     
     if (store.state.token) {
-      console.log(111) 
+      
       next();
     }
     else {
-      console.log(222)
+      
       next({
         path: '/login',
         // query: {
@@ -185,7 +185,7 @@ router.beforeEach((to, from, next) => {
       })
     }
   }else {
-    console.log(333)
+    
     next();
     }
   })

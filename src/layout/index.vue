@@ -93,6 +93,7 @@ export default {
     
     logOff(){
       jsCookie.remove("username")
+      jsCookie.remove("user")
       jsCookie.remove('tokenAuth')
       sessionStorage.removeItem('token')
       this.$router.push('/login');

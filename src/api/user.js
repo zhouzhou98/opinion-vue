@@ -14,5 +14,26 @@ export default {
       method: 'post',
       data
     })
+  },
+  updateUsername(data){
+    return axios({
+      url: '/api/user/updateUsername',
+      method: 'post',
+      data
+    })
+  },
+  updatePad(data){
+    return axios({
+      url: '/api/user/updatePassword',
+      method: 'post',
+      data
+    })
+  },
+  updateEmail(data){
+    return axios({
+      url: '/api/user/updateEmail',
+      method: 'post',
+      data
+    })
   }
 }
