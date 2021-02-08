@@ -11,7 +11,9 @@
         </el-form-item>
 
         <el-form-item>
+          
           <el-button type="primary" class="login-button" @click="submitForm('form')" :loading="isloading">登录</el-button>
+          未有账号?请前往<el-link type="primary" href='/register' :underline="false">注册页面</el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -53,17 +55,16 @@
               
               this.req.username=this.form.username
               this.req.password= md5(this.form.password)
-              console.log(md5(this.form.password))
+              
               UserApi.getLogin(this.req).then(res=>{
                
                 var code=res.data.code
                 this.$store.commit('set_token',"111");
   
                 if (store.state.token) {
-                this.$router.push('/')
-                console.log(store.state.token)
+                  this.$router.push('/')
                 } else {
-                this.$router.replace('/login');
+                  this.$router.replace('/login');
                 }
                 // if(code===0){
                 //   this.isloading = false;

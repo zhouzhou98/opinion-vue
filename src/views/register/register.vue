@@ -1,6 +1,6 @@
 <template>
     <div class="login-container">
-      <el-form ref="form"  :model="form" label-width="80px" class="login-form">
+      <el-form ref="form" :rules="rules"  :model="form" label-width="80px" class="login-form">
         <h4 class="login-title">舆论情报管理系统</h4>
         <br>
         <el-form-item label="用户名" prop="username">
@@ -14,6 +14,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" class="login-button" @click="submitForm('form')" :loading="isloading">注册</el-button>
+          已有有账号?请前往<el-link type="primary" href='/login' :underline="false">登录页面</el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -22,7 +23,7 @@
   import jscookie from 'js-cookie';
   import md5 from 'md5';
   import axios from 'axios'
-  
+  import { UserApi } from '@/api'
   import store from '@/store/index.js'
   export default {
     data() {
@@ -58,37 +59,23 @@
               
               this.req.username=this.form.username
               this.req.password= md5(this.form.password)
-              console.log(md5(this.form.password))
-              // UserApi.getLogin(this.req).then(res=>{
-                
-              //   var code=res.data.code
-              //   if(code===0){
-              //     this.isloading = false;
-              //     this.$message.success('登陆成功！');
-              //     var data= res.data.data
-              //     var token=data.token
-              //     var user=data.user
-              //     jscookie.set('tokenAuth',token)
-              //     jscookie.set('username',user.realName)
-              //     jscookie.set('user',user)
-
-              //     this.$store.commit('set_token', token);
-                
-              //     if (store.state.token) {
-              //       this.$router.push('/')
-                    
-              //     } else {
-              //       this.$router.replace('/login');
-              //     }
-              //     // this.$router.push('/');
-              //   }else{
-              //     this.isloading = false;
-              //     this.$message.error(res.data.data);
-              //   }
-              // }) .catch(err => {
-              //   this.isloading = false;
-              //   this.$message.error('登陆失败：' + err);
-              // });
+              this.req.email=this.form.email
+              
+              UserApi.register(this.req).then(res=>{
+                var code=res.data.code
+                if(code===0){
+                  this.$message.success(res.data.data+'接下来跳转到登陆页面');
+                  this.isloading = false;
+                  
+                  this.$router.push('/login')
+                }else{
+                  this.isloading = false;
+                  this.$message.error(res.data.data);
+                }
+              }) .catch(err => {
+                this.isloading = false;
+                this.$message.error('注册失败：' + err);
+              });
             } else {
               console.log('验证失败');
               return false;

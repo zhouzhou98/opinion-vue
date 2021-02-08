@@ -7,6 +7,12 @@ export default {
       method: 'post',
       data,
     })
+  },
+  register(data){
+    return axios({
+      url: '/api/user/register',
+      method: 'post',
+      data
+    })
   }
-  
 }
