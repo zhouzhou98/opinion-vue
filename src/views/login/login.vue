@@ -59,36 +59,30 @@
               UserApi.getLogin(this.req).then(res=>{
                
                 var code=res.data.code
-                this.$store.commit('set_token',"111");
-  
-                if (store.state.token) {
-                  this.$router.push('/')
-                } else {
-                  this.$router.replace('/login');
-                }
-                // if(code===0){
-                //   this.isloading = false;
-                //   this.$message.success('登陆成功！');
-                //   var data= res.data.data
-                //   var token=data.token
-                //   var user=data.user
-                //   jscookie.set('tokenAuth',token)
-                //   jscookie.set('username',user.realName)
-                //   jscookie.set('user',user)
-
-                //   this.$store.commit('set_token', token);
                 
-                //   if (store.state.token) {
-                //     this.$router.push('/')
+                if(code===0){
+                  this.isloading = false;
+                  this.$message.success('登陆成功！');
+                  var data= res.data.data
+                  var token=data.token
+                  var user=data.user
+                  jscookie.set('tokenAuth',token)
+                  jscookie.set('username',user.realName)
+                  jscookie.set('user',user)
+
+                  this.$store.commit('set_token', token);
+                
+                  if (store.state.token) {
+                    this.$router.push('/')
                     
-                //   } else {
-                //     this.$router.replace('/login');
-                //   }
-                //   // this.$router.push('/');
-                // }else{
-                //   this.isloading = false;
-                //   this.$message.error(res.data.data);
-                // }
+                  } else {
+                    this.$router.replace('/login');
+                  }
+                  // this.$router.push('/');
+                }else{
+                  this.isloading = false;
+                  this.$message.error(res.data.data);
+                }
               }) .catch(err => {
                 this.isloading = false;
                 this.$message.error('登陆失败：' + err);
