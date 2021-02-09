@@ -35,5 +35,12 @@ export default {
       method: 'post',
       data
     })
-  }
+  },
+  get(id){
+    return axios({
+      url: '/api/user/get/'+id,
+      method: 'get',
+      id
+    })
+  },
 }

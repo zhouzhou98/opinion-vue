@@ -7,7 +7,7 @@
       <div  class="text item">
         <el-form ref="form" :model="user" label-width="70px" size="mini">
           <el-form-item label="当前邮箱">
-            <el-input  clearable style="width:40%" v-model="user.email" disabled="true" placeholder="请输入邮箱"></el-input>
+            <el-input  clearable style="width:40%" v-model="user.email" disabled placeholder="请输入邮箱"></el-input>
           </el-form-item>
           <el-form-item label="新邮箱" label-width="70px">
             <el-input  clearable style="width:40%" v-model="user.newEmail" placeholder="请输入新邮箱" ></el-input> 
@@ -30,8 +30,8 @@
   import store from '@/store/index.js'
   export default {
     created(){
-       var email=JSON.parse(jsCookie.get('user')).email
-       this.user.email=email
+       var id=JSON.parse(jsCookie.get('user')).id
+       this.get(id)
     },
     data() {
       return {
@@ -48,11 +48,19 @@
         UserApi.updateEmail(this.req).then(res=>{
           if(res.data.code===0){
             this.isloading=false
-            location.reload()
+            this.get(this.req.id)
             this.$message.success(res.data.data);
           }else{
             this.isloading=false
             this.$message.error(res.data.data);
+          }
+        })
+      },
+      get(id){
+        UserApi.get(id).then(res=>{
+          if(res.data.code===0){
+            
+            this.user=res.data.data
           }
         })
       }

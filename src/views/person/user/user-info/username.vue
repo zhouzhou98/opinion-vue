@@ -32,8 +32,8 @@
   export default {
     created(){
        var id=JSON.parse(jsCookie.get('user')).id
+       this.get(id)
        
-       this.user.username=username
     },
     data() {
       return {
@@ -50,11 +50,19 @@
         UserApi.updateUsername(this.req).then(res=>{
           if(res.data.code===0){
             this.isloading=false
-            location.reload()
+            this.get(this.req.id)
             this.$message.success(res.data.data);
           }else{
             this.isloading=false
             this.$message.error(res.data.data);
+          }
+        })
+      },
+      get(id){
+        UserApi.get(id).then(res=>{
+          if(res.data.code===0){
+            
+            this.user=res.data.data
           }
         })
       }
