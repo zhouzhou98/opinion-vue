@@ -61,3 +61,4 @@ axios.interceptors.response.use((response) => {
 });
 
 export { default as UserApi } from './user.js';
+export { default as LogApi } from './log.js';
