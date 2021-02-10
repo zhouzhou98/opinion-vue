@@ -1,9 +1,9 @@
 <template>
   <div>
-      <el-radio-group v-model="radio" border size="medium">
+      <el-radio-group v-model="radio" border size="medium" @change="messagechange">
         <el-radio-button label="今日"></el-radio-button>
-        <el-radio-button label="最近三天"></el-radio-button>
-        <el-radio-button label="最近七天"></el-radio-button>
+        <el-radio-button label="最近三日"></el-radio-button>
+        <el-radio-button label="最近七日"></el-radio-button>
       </el-radio-group>
       <div style="margin-top:20px">
         <el-row>
@@ -13,8 +13,8 @@
                 <div slot="header" style="font-size:20%" class="clearfix">
                   <span>词云分析</span>
                 </div>
-                <div  class="text item">
-                  <ve-line :data="opinionData" :settings="opinionSettings"></ve-line>
+                <div  class="box" >
+                  <img :src="wordCloud" style="margin:0 auto">
                 </div>
               </el-card>
             </div>
@@ -41,34 +41,30 @@
 </template>
 <script>
  import { mapGetters } from 'vuex'
+ import { BlogApi } from '@/api'
   export default {
     computed: {
       ...mapGetters([
         'name'
       ])
     },
-    data () {
-      this.opinionSettings = {
-        metrics: ['舆情事件', '敏感事件', '非敏感事件','正面舆情事件','负面舆情事件'],
-        dimension: ['日期']
+    created(){
+      if(this.$route.query.kid) {
+        this.kid = this.$route.query.kid;
       }
+      this.messagechange()
+    },
+    data () {
+      
       this.wordSettings = {
         useDefaultOrder: true,
         filterZero: true
       }
       return {
         radio: '今日',
-        opinionData: {
-          columns: ['日期', '舆情事件', '敏感事件', '非敏感事件','正面舆情事件','负面舆情事件'],
-          rows: [
-            { '日期': '1/1', '舆情事件': 1393, '敏感事件': 1093, '非敏感事件': 25 ,'正面舆情事件':150,'负面舆情事件':690},
-            { '日期': '1/2', '舆情事件': 3530, '敏感事件': 3230, '非敏感事件': 69 ,'正面舆情事件':160 ,'负面舆情事件':650},
-            { '日期': '1/3', '舆情事件': 2923, '敏感事件': 2623, '非敏感事件': 80 ,'正面舆情事件':120,'负面舆情事件':630},
-            { '日期': '1/4', '舆情事件': 1723, '敏感事件': 1423, '非敏感事件': 1500 ,'正面舆情事件':150,'负面舆情事件':720},
-            { '日期': '1/5', '舆情事件': 3792, '敏感事件': 3492, '非敏感事件': 1200 ,'正面舆情事件':110,'负面舆情事件':100},
-            { '日期': '1/6', '舆情事件': 4593, '敏感事件': 4293, '非敏感事件': 70 ,'正面舆情事件':180,'负面舆情事件':120}
-          ]
-        },
+        wordCloud:"",
+        req:{},
+        kid:'',
         wordData: {
           columns: ['词汇', '数值'],
           rows: [
@@ -80,6 +76,27 @@
           ]
         }
       }
+    },
+    methods:{
+      
+      messagechange(){
+        
+        if(this.radio==='今日'){
+           this.req.day='today'
+        }else if(this.radio==='最近三日'){
+          this.req.day='three'
+        }else{
+          this.req.day='seven'
+        }
+        this.wordCloud="/api/blog/wordCloud?kid="+this.kid+"&day="+this.req.day
+      }
     }
   }
 </script>
+<style scoped>
+.box{
+  text-align: center;
+  margin: 0 auto
+}
+
+</style>

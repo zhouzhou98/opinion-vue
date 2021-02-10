@@ -41,5 +41,19 @@ export default {
       method: 'post',
       data
     })
+  },
+  getByPage(page) { // 前台查询
+    return axios({
+      url: '/api/blog/getByPage',
+      method: 'post',
+      data:page
+    })
+  },
+  singleTendency(data){
+    return axios({
+      url: '/api/blog/singleTendency',
+      method: 'post',
+      data
+    })
   }
 }
