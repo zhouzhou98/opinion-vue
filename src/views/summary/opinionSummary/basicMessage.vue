@@ -165,13 +165,25 @@
       }
       
       this.opinionSettings = {
-        metrics: ['舆情事件', '敏感事件', '非敏感事件','正面舆情事件','负面舆情事件'],
-        dimension: ['日期']
+        metrics: ['total', 'sensitive', 'nonsensitive','positive','negative'],
+        dimension: ['time'],
+        labelMap: {
+          total: '舆情事件',
+          sensitive: '敏感事件',
+          nonsensitive:'非敏感事件',
+          positive:'正面舆情事件',
+          negative:'负面舆情事件',
+        }
       }
       this.mapSettings = {
         position: 'china',
         // selectData: true,
-        selectedMode: 'single'
+        selectedMode: 'single',
+        metrics: ['count'],
+        
+        labelMap: {
+          count:'事件总数'
+        }
       }
       this.mapEvents = {
         click: (v) => {
@@ -206,24 +218,24 @@
           ]
         },
         opinionData: {
-          columns: ['日期', '舆情事件', '敏感事件', '非敏感事件','正面舆情事件','负面舆情事件'],
+          columns: ['time', 'total', 'sensitive', 'nonsensitive','positive','negative'],
           rows: [
-            { '日期': '1/1', '舆情事件': 1393, '敏感事件': 1093, '非敏感事件': 25 ,'正面舆情事件':150,'负面舆情事件':690},
-            { '日期': '1/2', '舆情事件': 3530, '敏感事件': 3230, '非敏感事件': 69 ,'正面舆情事件':160 ,'负面舆情事件':650},
-            { '日期': '1/3', '舆情事件': 2923, '敏感事件': 2623, '非敏感事件': 80 ,'正面舆情事件':120,'负面舆情事件':630},
-            { '日期': '1/4', '舆情事件': 1723, '敏感事件': 1423, '非敏感事件': 1500 ,'正面舆情事件':150,'负面舆情事件':720},
-            { '日期': '1/5', '舆情事件': 3792, '敏感事件': 3492, '非敏感事件': 1200 ,'正面舆情事件':110,'负面舆情事件':100},
-            { '日期': '1/6', '舆情事件': 4593, '敏感事件': 4293, '非敏感事件': 70 ,'正面舆情事件':180,'负面舆情事件':120}
+            // { '日期': '1/1', '舆情事件': 1393, '敏感事件': 1093, '非敏感事件': 25 ,'正面舆情事件':150,'负面舆情事件':690},
+            // { '日期': '1/2', '舆情事件': 3530, '敏感事件': 3230, '非敏感事件': 69 ,'正面舆情事件':160 ,'负面舆情事件':650},
+            // { '日期': '1/3', '舆情事件': 2923, '敏感事件': 2623, '非敏感事件': 80 ,'正面舆情事件':120,'负面舆情事件':630},
+            // { '日期': '1/4', '舆情事件': 1723, '敏感事件': 1423, '非敏感事件': 1500 ,'正面舆情事件':150,'负面舆情事件':720},
+            // { '日期': '1/5', '舆情事件': 3792, '敏感事件': 3492, '非敏感事件': 1200 ,'正面舆情事件':110,'负面舆情事件':100},
+            // { '日期': '1/6', '舆情事件': 4593, '敏感事件': 4293, '非敏感事件': 70 ,'正面舆情事件':180,'负面舆情事件':120}
           ]
         },
         cityName: '',
         mapData: {
-          columns: ['位置', '事件总数'],
+          columns: ['data', 'count'],
           rows: [
-            { '位置': '吉林', '事件总数': 123 },
-            { '位置': '北京', '事件总数': 1223 },
-            { '位置': '上海', '事件总数': 2123 },
-            { '位置': '浙江', '事件总数': 4123 }
+            // { '位置': '吉林', '事件总数': 123 },
+            // { '位置': '北京', '事件总数': 1223 },
+            // { '位置': '上海', '事件总数': 2123 },
+            // { '位置': '浙江', '事件总数': 4123 }
           ]
         }
       }
@@ -242,6 +254,8 @@
         this.getSensitive(this.req)
         this.getPositive(this.req)
         this.getOrigin(this.req)
+        this.getTendency(this.req)
+        this.getMap(this.req)
       },
 
       async getEvent(req){
@@ -273,6 +287,24 @@
             this.originData.rows=res.data.data
           } 
         })  
+      },
+      async getTendency(req){
+        BlogApi.getTendency(req).then(res=>{
+          if(res.data.code===0){
+            
+            this.opinionData.rows=res.data.data
+            
+          }
+        })
+      },
+      async getMap(req){
+        BlogApi.getMap(req).then(res=>{
+          if(res.data.code===0){
+            
+            this.mapData.rows=res.data.data
+            
+          }
+        })
       }
     }
   }

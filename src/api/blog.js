@@ -27,5 +27,19 @@ export default {
       method: 'post',
       data
     })
+  },
+  getTendency(data){
+    return axios({
+      url: '/api/blog/getTendency',
+      method: 'post',
+      data
+    })
+  },
+  getMap(data){
+    return axios({
+      url: '/api/blog/getMap',
+      method: 'post',
+      data
+    })
   }
 }
