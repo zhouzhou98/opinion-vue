@@ -174,28 +174,17 @@
         })
       },
       exportMeg(keyword){
-        keyword.isLoading=true
+        // keyword.isLoading=true
         var id=keyword.id
         // window.open('/api/keyword/exportMeg/'+id,"_parent")
         // keyword.isLoading=false
         KeywordApi.exportMeg(id).then(res=>{
-          console.log(res)
-          // //对流的处理
-          // const blob=new Blob([res],{type:'application/vnd.ms-excel'})
-          // //创建节点
-          // const elink=document.createElement('a')
-          // elink.download="关键字-"+keyword.kname +".xlsx"
-          // elink.style.display="none"
-          // elink.href=URL.createObjectURL(blob)
-          // document.body.appendChild(elink)
-          // elink.click()
-          // //释放链接
-          // URL.revokeObjectURL(elink.href)
-          // document.body.removeChild(elink)
-          keyword.isLoading=false
+         
+          // keyword.isLoading=false
         }).catch(() => {
-          keyword.loading = false
+          // keyword.loading = false
         })
+         keyword.isLoading=false
       }
     }
   }

@@ -1,10 +1,10 @@
 <template>
   <div>
     <div>
-      <el-radio-group v-model="radio" border size="medium">
+      <el-radio-group v-model="radio" border size="medium" @change="messagechange">
         <el-radio-button label="今日"></el-radio-button>
-        <el-radio-button label="最近三天"></el-radio-button>
-        <el-radio-button label="最近七天"></el-radio-button>
+        <el-radio-button label="最近三日"></el-radio-button>
+        <el-radio-button label="最近七日"></el-radio-button>
       </el-radio-group>
       <el-divider content-position="left"></el-divider>
       <div >
@@ -16,7 +16,7 @@
                   <span>事件总数</span>
                 </div>
                 <div style="font-size:15%" class="text item">
-                  24
+                  {{total}}
                 </div>
               </el-card>
             </div>
@@ -29,7 +29,7 @@
                     <span>事件均值</span>
                   </div>
                   <div style="font-size:15%" class="text item">
-                    24
+                    {{avl}}
                   </div>
                 </el-card>
               </div>
@@ -43,7 +43,7 @@
                     <span>事件峰值</span>
                   </div>
                   <div style="font-size:15%" class="text item">
-                    24
+                    {{top}}
                   </div>
                 </el-card>
               </div>
@@ -96,7 +96,7 @@
                     <span>数据来源统计图</span>
                   </div>
                   <div  class="text item">
-                    <ve-pie :data="originData" :extend="chartExtend"  :settings="chartSettings"></ve-pie>
+                    <ve-pie :data="originData" :extend="chartExtend"></ve-pie>
                   </div>
                 </el-card>
               </div>
@@ -141,17 +141,20 @@
 </template>
 <script>
   import { mapGetters } from 'vuex'
+  import { BlogApi } from '@/api'
   export default {
+    created(){
+      if(this.$route.query.kid) {
+        this.kid = this.$route.query.kid;
+      }
+      this.messagechange()
+    },
     computed: {
       ...mapGetters([
         'name'
       ])
     },
     data () {
-      this.chartSettings ={
-        
-        dataType: 'percent'
-      }
       this.chartExtend = {
           
           series: {
@@ -160,6 +163,7 @@
             center: ['50%', '50%']
           }
       }
+      
       this.opinionSettings = {
         metrics: ['舆情事件', '敏感事件', '非敏感事件','正面舆情事件','负面舆情事件'],
         dimension: ['日期']
@@ -176,31 +180,29 @@
       }
       return {
         radio: '今日',
+        kid:'',
+        total:0,
+        avl:0,
+        top:0,
+        req:{},
         sensitiveData: {
-          columns: ['数据', '数量'],
+          columns: ['data', 'count'],
           rows: [
-            { '数据': '非敏感词', '数量': 1393 },
-            { '数据': '敏感词', '数量': 3530 },
-            
+            // { 'data': 'sensitive', 'count': 1393 },
+            // { 'data': 'nonsitive', 'count': 3530 },
           ]
         },
         opiOrNegData: {
-          columns: ['数据', '数量'],
+          columns: ['data', 'count'],
           rows: [
-            { '数据': '正面舆情', '数量': 1393 },
-            { '数据': '负面舆情', '数量': 3530 },
-            
+            // { 'data': 'positive', 'count': 1393 },
+            // { 'data': 'negative', 'count': 3530 },
           ]
         },
         originData: {
-          columns: ['博主', '博文数量'],
+          columns: ['data', 'count'],
           rows: [
-            { '博主': '1/1', '博文数量': 1393 },
-            { '博主': '1/2', '博文数量': 3530 },
-            { '博主': '1/3', '博文数量': 2923 },
-            { '博主': '1/4', '博文数量': 1723 },
-            { '博主': '1/5', '博文数量': 3792 },
-            { '博主': '1/6', '博文数量': 4593 }
+           
           ]
         },
         opinionData: {
@@ -224,6 +226,53 @@
             { '位置': '浙江', '事件总数': 4123 }
           ]
         }
+      }
+    },
+    methods:{
+      messagechange(){
+        this.req.kid=this.kid
+        if(this.radio==='今日'){
+           this.req.day='today'
+        }else if(this.radio==='最近三日'){
+          this.req.day='three'
+        }else{
+          this.req.day='seven'
+        }
+        this.getEvent(this.req)
+        this.getSensitive(this.req)
+        this.getPositive(this.req)
+        this.getOrigin(this.req)
+      },
+
+      async getEvent(req){
+        BlogApi.getEvent(req).then(res=>{
+          if(res.data.code===0){
+            this.total=res.data.data.total
+            this.avl=res.data.data.avl
+            this.top=res.data.data.top
+          }
+        })
+      },
+      async getSensitive(req){
+        BlogApi.getSensitive(req).then(res=>{
+            if(res.data.code===0){
+              this.sensitiveData.rows=res.data.data
+            } 
+        })
+      },
+      async getPositive(req){
+        BlogApi.getPositive(req).then(res=>{
+            if(res.data.code===0){
+              this.opiOrNegData.rows=res.data.data
+            } 
+        })  
+      },
+      async getOrigin(req){
+        BlogApi.getOrigin(req).then(res=>{
+          if(res.data.code===0){
+            this.originData.rows=res.data.data
+          } 
+        })  
       }
     }
   }

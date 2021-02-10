@@ -63,3 +63,4 @@ axios.interceptors.response.use((response) => {
 export { default as UserApi } from './user.js';
 export { default as LogApi } from './log.js';
 export { default as KeywordApi } from './keyword.js';
+export { default as BlogApi } from './blog.js';
