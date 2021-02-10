@@ -11,7 +11,7 @@
           </el-form-item>
       </el-form-item>
       <el-form-item >
-        <el-input placeholder="请输入舆情关键字"></el-input>
+        <el-input placeholder="请输入舆情关键字" v-model="page.params.kname"></el-input>
       </el-form-item>
       <el-form-item >
         <el-button type="primary" size="medium"  @click="getByPage">搜索</el-button>

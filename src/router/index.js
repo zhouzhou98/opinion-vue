@@ -162,31 +162,19 @@ if (sessionStorage.getItem('token')) {
   store.commit('set_token', sessionStorage.getItem('token'))
 }
 router.beforeEach((to, from, next) => {
-  
-  // console.log(to.path)
-
-  if (to.matched.some(r =>{
-   
-    r.meta.requireAuth
-  } )) {   //这里的requireAuth为路由中定义的 meta:{requireAuth:true}，意思为：该路由添加该字段，表示进入该路由需要登陆的
-    // console.log(store.state.token)
-    
-    if (store.state.token) {
-      
-      next();
-    }
+  if (to.matched.some(r => r.meta.requireAuth)) {   //这里的requireAuth为路由中定义的 meta:{requireAuth:true}，意思为：该路由添加该字段，表示进入该路由需要登陆的
+      if (store.state.token) {
+        next();
+      }
+      else {
+        next({
+          path: '/login',
+          // query: {redirect: to.fullPath}
+          })
+        }
+      }
     else {
-      
-      next({
-        path: '/login',
-        // query: {
-        //   redirect: to.fullPath
-        // }
-      })
-    }
-  }else {
-    
-    next();
+      next();
     }
   })
 export default router

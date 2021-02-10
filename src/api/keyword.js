@@ -36,7 +36,7 @@ export default {
     })
   },
   exportMeg(id){
-    window.open("api/keyword/exportMeg/"+id, "_parent");
+    window.open("/api/keyword/exportMeg/"+id, "_parent");
     // return axios({
     //   url: '/api/keyword/exportMeg/'+id,
     //   method: 'post',
