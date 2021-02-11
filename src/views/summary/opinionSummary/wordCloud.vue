@@ -66,13 +66,13 @@
         req:{},
         kid:'',
         wordData: {
-          columns: ['词汇', '数值'],
+          columns: ['data', 'count'],
           rows: [
-            { '词汇': '展示', '数值': 400 },
-            { '词汇': '访问', '数值': 100 },
-            { '词汇': '零', '数值': 200 },
-            { '词汇': '点击', '数值': 300 },
-            { '词汇': '订单', '数值': 200 }
+            // { '词汇': '展示', '数值': 400 },
+            // { '词汇': '访问', '数值': 100 },
+            // { '词汇': '零', '数值': 200 },
+            // { '词汇': '点击', '数值': 300 },
+            // { '词汇': '订单', '数值': 200 }
           ]
         }
       }
@@ -80,7 +80,7 @@
     methods:{
       
       messagechange(){
-        
+        this.req.kid=this.kid
         if(this.radio==='今日'){
            this.req.day='today'
         }else if(this.radio==='最近三日'){
@@ -89,6 +89,9 @@
           this.req.day='seven'
         }
         this.wordCloud="/api/blog/wordCloud?kid="+this.kid+"&day="+this.req.day
+        BlogApi.wordFrequency(this.req).then(res=>{
+          this.wordData.rows=res.data.data
+        })
       }
     }
   }

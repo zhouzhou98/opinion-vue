@@ -80,7 +80,8 @@ export default {
 
     prefixPath () {
       const split = this.$route.path.split('/');
-      return '/' + split.slice(1, this.prefixPathLevel + 1).join('/')+"/summary"+this.kid;
+      
+      return '/' + split.slice(1, this.prefixPathLevel + 1).join('/')+"/"+split[2]+this.kid;
     },
 
     showRoutes () {

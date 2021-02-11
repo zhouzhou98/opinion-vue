@@ -55,5 +55,12 @@ export default {
       method: 'post',
       data
     })
+  },
+  wordFrequency(data){
+    return axios({
+      url: '/api/blog/frequency',
+      method: 'post',
+      data
+    })
   }
 }
