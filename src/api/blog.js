@@ -62,5 +62,12 @@ export default {
       method: 'post',
       data
     })
+  },
+  getWarning(data){
+    return axios({
+      url: '/api/blog/warning',
+      method: 'post',
+      data
+    })
   }
 }
