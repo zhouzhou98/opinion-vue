@@ -43,7 +43,7 @@
       <el-table-column align="center" label="操作" width="200">
         <template slot-scope="scope" align="center">
           <el-button size="mini" :plain="true" type="success" @click="exportMeg(scope.row.id)">数据导出</el-button>
-          <el-button size="mini" :plain="true" type="warning">微博报告</el-button>
+          <el-button size="mini" :plain="true" type="warning" @click="copy(scope.row.href)">复制链接</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -206,6 +206,20 @@
           
         })
         
+      },
+      copy(data){
+        let url = data;
+        let oInput = document.createElement('input');
+        oInput.value = url;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象;
+        console.log(oInput.value)
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        this.$message({
+          message: '复制成功,可前往网页查看',
+          type: 'success'
+        });
+        oInput.remove()
       }
     }
   }
