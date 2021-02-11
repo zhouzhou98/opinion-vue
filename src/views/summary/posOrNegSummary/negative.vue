@@ -1,6 +1,6 @@
 <template>
   <div>
-     <!-- 搜索栏 -->
+      <!-- 搜索栏 -->
     <el-form :inline="true" class="user-search-form" :model="page"  size="medium">
       <el-form-item>
           <el-form-item>
@@ -55,10 +55,10 @@
     </el-pagination>
     <el-divider content-position="left"></el-divider>
     <div>
-      <el-radio-group v-model="radio" border size="medium">
+      <el-radio-group v-model="radio" border size="medium" @change="messagechange">
         <el-radio-button label="今日"></el-radio-button>
-        <el-radio-button label="最近三天"></el-radio-button>
-        <el-radio-button label="最近七天"></el-radio-button>
+        <el-radio-button label="最近三日"></el-radio-button>
+        <el-radio-button label="最近七日"></el-radio-button>
       </el-radio-group>
       <!-- <el-divider content-position="left"></el-divider> -->
       <div style="margin-top:20px">
@@ -70,7 +70,7 @@
                     <span>正负舆情占比分析图</span>
                   </div>
                   <div  class="text item">
-                    <ve-pie :data="negativeData" :extend="negativeExtend"  :settings="negativeSettings"></ve-pie>
+                    <ve-pie :data="positiveData" :extend="positiveExtend"></ve-pie>
                   </div>
                 </el-card>
               </div>
@@ -100,11 +100,8 @@
       this.messagechange()
     },
     data() {
-      this.negativeSettings ={
-        
-        dataType: 'percent'
-      }
-      this.negativeExtend = {
+     
+      this.positiveExtend = {
           
           series: {
             // radius: ['50%', '65%'],
@@ -114,9 +111,10 @@
       }
       return {
         radio: '今日',
+        kid:'',
+        req:{},
         addDialog: false, // 控制添加弹窗显示
         updateDialog: false,//控制更新弹窗显示
-        req:{},
         page: {
           currentPage: 1, //当前页
           pageSize: 10, //每页显示条数
@@ -127,14 +125,15 @@
           sortMethod: 'desc', //排序方式
           list: [] //数据
         },
-        negativeData: {
-          columns: ['数据', '数量'],
+        positiveData: {
+          columns: ['data', 'count'],
           rows: [
-            { '数据': '正面舆情', '数量': 1393 },
-            { '数据': '负面舆情', '数量': 3530 },
+            // { '数据': '正面舆情', '数量': 1393 },
+            // { '数据': '负面舆情', '数量': 3530 },
             
           ]
-        }
+        },
+        
       }
       
     },
@@ -167,9 +166,11 @@
         return moment(v).format("YYYY/MM/DD HH:mm:ss");
       },
       getByPage() {
-        this.page.params.kid=this.kid
+        this.page.params.kid=this.kid 
+        this.page.params.posOrNeg=-1
         BlogApi.getByPage(this.page).then(res=>{
           //判断是否超页
+         
           if(this.page.currentPage > res.data.data.totalPage&&this.page.totalPage!=0) {
             this.page = res.data.data
             this.page.currentPage = 1;
@@ -188,11 +189,11 @@
         }else{
           this.req.day='seven'
         }
-        // BlogApi.singleTendency(this.req).then(res=>{
-        //   if(res.data.code===0){
-        //       this.opinionData.rows=res.data.data
-        //   } 
-        // })
+        BlogApi.getPositive(this.req).then(res=>{
+          if(res.data.code===0){
+              this.positiveData.rows=res.data.data
+            } 
+        })
       },
     }
   }

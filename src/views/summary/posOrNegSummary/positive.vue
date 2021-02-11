@@ -55,10 +55,10 @@
     </el-pagination>
     <el-divider content-position="left"></el-divider>
     <div>
-      <el-radio-group v-model="radio" border size="medium">
+      <el-radio-group v-model="radio" border size="medium" @change="messagechange">
         <el-radio-button label="今日"></el-radio-button>
-        <el-radio-button label="最近三天"></el-radio-button>
-        <el-radio-button label="最近七天"></el-radio-button>
+        <el-radio-button label="最近三日"></el-radio-button>
+        <el-radio-button label="最近七日"></el-radio-button>
       </el-radio-group>
       <!-- <el-divider content-position="left"></el-divider> -->
       <div style="margin-top:20px">
@@ -70,7 +70,7 @@
                     <span>正负舆情占比分析图</span>
                   </div>
                   <div  class="text item">
-                    <ve-pie :data="positiveData" :extend="positiveExtend"  :settings="positiveSettings"></ve-pie>
+                    <ve-pie :data="positiveData" :extend="positiveExtend"></ve-pie>
                   </div>
                 </el-card>
               </div>
@@ -100,10 +100,7 @@
       this.messagechange()
     },
     data() {
-      this.positiveSettings ={
-        
-        dataType: 'percent'
-      }
+     
       this.positiveExtend = {
           
           series: {
@@ -129,10 +126,10 @@
           list: [] //数据
         },
         positiveData: {
-          columns: ['数据', '数量'],
+          columns: ['data', 'count'],
           rows: [
-            { '数据': '正面舆情', '数量': 1393 },
-            { '数据': '负面舆情', '数量': 3530 },
+            // { '数据': '正面舆情', '数量': 1393 },
+            // { '数据': '负面舆情', '数量': 3530 },
             
           ]
         },
@@ -192,11 +189,11 @@
         }else{
           this.req.day='seven'
         }
-        // BlogApi.singleTendency(this.req).then(res=>{
-        //   if(res.data.code===0){
-        //       this.opinionData.rows=res.data.data
-        //     } 
-        // })
+        BlogApi.getPositive(this.req).then(res=>{
+          if(res.data.code===0){
+              this.positiveData.rows=res.data.data
+            } 
+        })
       },
     }
   }
