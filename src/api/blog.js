@@ -69,5 +69,8 @@ export default {
       method: 'post',
       data
     })
+  },
+  exportMeg(id,uid){
+    window.open("/api/blog/exportMeg?id="+id+"&uid="+uid, "_parent");
   }
 }

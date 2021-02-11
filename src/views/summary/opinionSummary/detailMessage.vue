@@ -43,7 +43,7 @@
       <el-table-column align="center" label="操作" width="200">
         <template slot-scope="scope" align="center">
           
-          <el-button size="mini" :plain="true" type="success">数据导出</el-button>
+          <el-button size="mini" :plain="true" type="success" @click="exportMeg(scope.row.id)">数据导出</el-button>
           <el-button size="mini" :plain="true" type="warning">微博报告</el-button>
         </template>
       </el-table-column>
@@ -86,6 +86,7 @@
 
   import moment from "moment";
   import { BlogApi } from '@/api'
+  import jsCookie from 'js-cookie';
   export default {
     created(){
       if(this.$route.query.kid) {
@@ -197,6 +198,16 @@
             } 
         })
       },
+      exportMeg(id){
+        var uid=JSON.parse(jsCookie.get('user')).id
+        BlogApi.exportMeg(id,uid).then(res=>{
+          console.log("执行成功")
+          
+        }).catch(() => {
+          
+        })
+        
+      }
     }
   }
 </script>
